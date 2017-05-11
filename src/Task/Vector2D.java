@@ -1,6 +1,8 @@
 package Task;
 
 
+import java.util.Vector;
+
 public class Vector2D {
 
     /**
@@ -47,7 +49,7 @@ public class Vector2D {
      * @param vector for adding with current
      * @return new vector as result adding current and specified vector
      */
-    public Vector2D add (Vector2D vector){
+    public synchronized Vector2D add (Vector2D vector){
         return new Vector2D(
                 getX1() + vector.getX1(),
                 getY1() + vector.getY1(),
@@ -60,7 +62,7 @@ public class Vector2D {
      * @param vector for take out from current
      * @return vector as result difference current and specified vector
      */
-    public Vector2D subtract (Vector2D vector){
+    public synchronized Vector2D subtract (Vector2D vector){
         return new Vector2D(
                 getX1() - vector.getX1(),
                 getY1() - vector.getY1(),
@@ -73,7 +75,7 @@ public class Vector2D {
      * @param factor for multiple on vector
      * @return vector as result multiple current vector on factor
      */
-    public Vector2D multiply (double factor){
+    public synchronized Vector2D multiply (double factor){
         return new Vector2D(
                 x1 * factor,
                 y1 * factor,
