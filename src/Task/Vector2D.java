@@ -72,6 +72,10 @@ public class Vector2D {
         return new Vector2D(x1, y1, x2, y2);
     }
 
+    /**
+     * adding vector to this instance
+     * @param vector for adding
+     */
     public void addToThis (Vector2D vector){
         try {
             sem.acquire();
@@ -104,6 +108,10 @@ public class Vector2D {
         return new Vector2D(x1, y1, x2, y2);
     }
 
+    /**
+     * subtract vector from this instance
+     * @param vector that subtracting
+     */
     public void subtractFromThis (Vector2D vector){
         try {
             sem.acquire();
@@ -136,6 +144,10 @@ public class Vector2D {
         return new Vector2D(x1, y1, x2, y2);
     }
 
+    /**
+     * multiply vector on factor
+     * @param factor factor
+     */
     public void multiplyThis (double factor){
         try {
             sem.acquire();
