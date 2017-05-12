@@ -2,13 +2,14 @@ package Task;
 
 
 import java.util.Vector;
+import java.util.concurrent.Semaphore;
 
 public class Vector2D {
 
     /**
      * First point of vector
      */
-    private final double x1, y1;
+    private double x1, y1;
 
     public double getX1() {
         return x1;
@@ -21,7 +22,7 @@ public class Vector2D {
     /**
      * Second point of vector
      */
-    private final double x2, y2;
+    private double x2, y2;
 
     public double getX2() {
         return x2;
@@ -31,11 +32,17 @@ public class Vector2D {
         return y2;
     }
 
+    /**
+     * semaphore for critical section
+     */
+    private Semaphore sem;
+
     public Vector2D() {
         x1 = 0;
         y1 = 0;
         x2 = 0;
         y2 = 0;
+        sem = new Semaphore(1);
     }
 
     public Vector2D(double x1, double y1, double x2, double y2) {
@@ -43,45 +50,103 @@ public class Vector2D {
         this.y1 = y1;
         this.x2 = x2;
         this.y2 = y2;
+        sem = new Semaphore(1);
     }
 
     /**
      * @param vector for adding with current
      * @return new vector as result adding current and specified vector
      */
-    public synchronized Vector2D add (Vector2D vector){
-        return new Vector2D(
-                getX1() + vector.getX1(),
-                getY1() + vector.getY1(),
-                getX2() + vector.getX2(),
-                getY2() + vector.getY2()
-        );
+    public Vector2D add (Vector2D vector){
+        double x1=0, y1=0, x2=0, y2=0;
+        try {
+            sem.acquire();
+            x1 = getX1() + vector.getX1();
+            y1 = getY1() + vector.getY1();
+            x2 = getX2() + vector.getX2();
+            y2 = getY1() + vector.getY2();
+        } catch (InterruptedException e){
+            System.out.println(e.getMessage());
+        }
+        sem.release();
+        return new Vector2D(x1, y1, x2, y2);
+    }
+
+    public void addToThis (Vector2D vector){
+        try {
+            sem.acquire();
+            x1 = getX1() + vector.getX1();
+            y1 = getY1() + vector.getY1();
+            x2 = getX2() + vector.getX2();
+            y2 = getY2() + vector.getY2();
+        } catch (InterruptedException e){
+            System.out.println(e.getMessage());
+        }
+        sem.release();
     }
 
     /**
      * @param vector for take out from current
      * @return vector as result difference current and specified vector
      */
-    public synchronized Vector2D subtract (Vector2D vector){
-        return new Vector2D(
-                getX1() - vector.getX1(),
-                getY1() - vector.getY1(),
-                getX2() - vector.getX2(),
-                getY2() - vector.getY2()
-        );
+    public Vector2D subtract (Vector2D vector){
+        double x1=0, y1=0, x2=0, y2=0;
+        try {
+            sem.acquire();
+            x1 = getX1() - vector.getX1();
+            y1 = getY1() - vector.getY1();
+            x2 = getX2() - vector.getX2();
+            y2 = getY2() - vector.getY2();
+        } catch (InterruptedException e){
+            System.out.println(e.getMessage());
+        }
+        sem.release();
+        return new Vector2D(x1, y1, x2, y2);
+    }
+
+    public void subtractFromThis (Vector2D vector){
+        try {
+            sem.acquire();
+            x1 = getX1() - vector.getX1();
+            y1 = getY1() - vector.getY1();
+            x2 = getX2() - vector.getX2();
+            y2 = getY1() - vector.getY2();
+        } catch (InterruptedException e){
+            System.out.println(e.getMessage());
+        }
+        sem.release();
     }
 
     /**
      * @param factor for multiple on vector
      * @return vector as result multiple current vector on factor
      */
-    public synchronized Vector2D multiply (double factor){
-        return new Vector2D(
-                x1 * factor,
-                y1 * factor,
-                x2 * factor,
-                y2 * factor
-        );
+    public Vector2D multiply (double factor){
+        double x1=0, y1=0, x2=0, y2=0;
+        try {
+            sem.acquire();
+            x1 *= factor;
+            y1 *= factor;
+            x2 *= factor;
+            y2 *= factor;
+        } catch (InterruptedException e){
+            System.out.println(e.getMessage());
+        }
+        sem.release();
+        return new Vector2D(x1, y1, x2, y2);
+    }
+
+    public void multiplyThis (double factor){
+        try {
+            sem.acquire();
+            x1 *= factor;
+            y1 *= factor;
+            x2 *= factor;
+            y2 *= factor;
+        } catch (InterruptedException e){
+            System.out.println(e.getMessage());
+        }
+        sem.release();
     }
 
     @Override
